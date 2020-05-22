@@ -1,37 +1,48 @@
 <template>
     <div id="exam">
-        <el-row>
-            <el-col :span="2">
-                <div class="grid-content bg-purple">
-                    <div class="navigation">
-                        <div style="margin-bottom: 20px;">
-                            <el-button size="small" @click="addTab(editableTabsValue2)">
-                                新增表
-                            </el-button>
-                        </div>
-                        <el-tabs v-model="editableTabsValue2" type="card" closable @tab-remove="removeTab" tab-position="left" @tab-click="onClick">
-                            <el-tab-pane v-for="item in editableTabs2" :key="item.name" :label="item.title" :name="item.name">
-                                {{item.content}}
-                            </el-tab-pane>
-                        </el-tabs>
-                    </div>
-                </div>
-            </el-col>
-            <el-col :span="22">
-                <div class="grid-content bg-purple-light">
-                    <div class="table">
-                        <el-table :data="tableData" border style="width: 100%">
-                            <el-table-column prop="date" label="日期" width="180">
-                            </el-table-column>
-                            <el-table-column prop="name" label="姓名" width="180">
-                            </el-table-column>
-                            <el-table-column prop="address" label="地址">
-                            </el-table-column>
-                        </el-table>
-                    </div>
-                </div>
-            </el-col>
-        </el-row>
+        <div class="title">选择你的操作吧！(#^.^#)</div>
+        <div v-show="isImg==1"><img src="../assets/8.gif"></div>
+        <div v-show="isImg==0">
+            <el-table :data="tableData" stripe style="width: 100%">
+                <el-table-column prop="date" label="日期" width="180">
+                </el-table-column>
+                <el-table-column prop="name" label="姓名" width="180">
+                </el-table-column>
+                <el-table-column prop="address" label="地址">
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="foot">
+            <div class="top">
+                <el-select v-model="value" placeholder="请选择">
+                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+                <el-button style="margin-left:10px; " @click="isImg=0">查看此表</el-button>
+                <el-input v-model="input" placeholder="请输入关键字"></el-input>
+                <el-button @click="isImg=0">简单查询</el-button>
+                <el-input v-model="input" placeholder="请输入索引"></el-input>
+                <el-input v-model="input"  style="margin-left:0" placeholder="请输入关键字"></el-input>
+                <el-button @click="isImg=0" >索引查询</el-button>
+                <el-button type="primary" @click="isImg=1">结束当前操作</el-button>
+            </div>
+            <div class="bottom">
+                <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                    <el-form-item label="wait_time">
+                        <el-input v-model="formInline.waittime" placeholder="wait_time"></el-input>
+                    </el-form-item>
+                    <el-form-item label="mode">
+                        <el-input v-model="formInline.mode" placeholder="mode"></el-input>
+                    </el-form-item>
+                    <el-form-item label="vip">
+                        <el-input v-model="formInline.vip" placeholder="vip"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button plain @click="open3" type="primary">确定新增</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -39,17 +50,6 @@ export default {
     name: 'Exam2',
     data() {
         return {
-            editableTabsValue2: '2',
-            editableTabs2: [{
-                title: 'sheet 1',
-                name: '1',
-                content: ''
-            }, {
-                title: 'sheet 2',
-                name: '2',
-                content: ''
-            }],
-            tabIndex: 2,
             tableData: [{
                 date: '2016-05-02',
                 name: '王小虎',
@@ -66,11 +66,54 @@ export default {
                 date: '2016-05-03',
                 name: '王小虎',
                 address: '上海市普陀区金沙江路 1516 弄'
-            }]
+            }],
+            isImg: 1,
+            formInline: {
+                name: '',
+                vip: '',
+                id: '',
+                waittime: '',
+                mode: '',
+
+            },
+            input: '',
+            options: [{
+                value: '选项1',
+                label: '黄金糕'
+            }, {
+                value: '选项2',
+                label: '双皮奶'
+            }, {
+                value: '选项3',
+                label: '蚵仔煎'
+            }, {
+                value: '选项4',
+                label: '龙须面'
+            }, {
+                value: '选项5',
+                label: '北京烤鸭'
+            }],
+            value: ''
 
         }
     },
     methods: {
+        open3() {
+            if (this.isImg == 1) {
+                this.$notify({
+                    title: '成功',
+                    message: '这是一条成功的提示消息',
+                    type: 'success'
+                });
+            } else {
+                this.$notify({
+                    title: '警告',
+                    message: '这是一条警告的提示消息',
+                    type: 'warning'
+                });
+            }
+
+        },
         addTab() {
             let newTabName = ++this.tabIndex + '';
             this.editableTabs2.push({
@@ -106,9 +149,32 @@ export default {
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-
 <style scoped>
-#exam{
+#exam {
     margin-top: 40px;
+    text-align: center;
 }
+
+.title {
+
+    font: 50px Extra large;
+    font-family: "PingFang SC";
+
+}
+
+.el-input {
+
+    margin-right: 10px;
+}
+
+.top {
+    margin-bottom: 20px;
+}
+
+.top .el-input {
+    width: 10%;
+    margin-left: 30px;
+}
+
+
 </style>

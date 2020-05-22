@@ -1,7 +1,7 @@
 
 <template>
   <div id="exam">
-   exam4
+   <img src="../assets/4.gif" >
   </div>
   
 </template>
